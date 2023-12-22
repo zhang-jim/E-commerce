@@ -18,6 +18,10 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->integer('inventory')->default(0);
             $table->string('image');
+            $table->foreignId('categories_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('cascade');
             $table->boolean('is_published')->default(false);
             $table->integer('sales_quantity')->default(0);
             $table->timestamps();

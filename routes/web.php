@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     //這將自動生成 index, create, store, show, edit, update, destroy 這些動作的路由。
     Route::resource('product', ProductController::class);
+    Route::resource('category', CategoryController::class)->only(['index','store','edit','update','destroy']);
 });
 
 require __DIR__.'/auth.php';
