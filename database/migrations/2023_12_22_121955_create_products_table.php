@@ -13,17 +13,18 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->decimal('price', 10, 2);
-            $table->integer('inventory')->default(0);
-            $table->string('image');
-            $table->foreignId('categories_id')
+            $table->string('name'); //商品名稱
+            $table->text('description'); //商品描述
+            $table->integer('price'); //商品售價
+            $table->integer('inventory')->default(0); //商品庫存
+            $table->string('image'); //商品圖片
+            $table->foreignId('categories_id') //關聯類別
                 ->nullable()
                 ->constrained()
+                ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->boolean('is_published')->default(false);
-            $table->integer('sales_quantity')->default(0);
+            $table->boolean('is_published')->default(false); //上架狀態
+            $table->integer('sales_quantity')->default(0); //銷售數量
             $table->timestamps();
         });
     }
