@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ecpayController;
+
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MemberController;
@@ -22,13 +24,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('ecpay', ecpayController::class);
+Route::post('/receive', [ecpayController::class, 'receive']);
+Route::post('/logisticsSelection', [ecpayController::class, 'logisticsSelection']);
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::get('/token', function () {
-//     return csrf_token();
-// });
+Route::get('/token', function () {
+    return csrf_token();
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

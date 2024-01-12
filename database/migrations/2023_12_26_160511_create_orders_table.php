@@ -19,8 +19,9 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->integer('order_amount'); //訂單金額
-            $table->enum('payment_status', ['pending', 'paid', 'failed']); // 付款狀態 (代付款｜已付款｜付款失敗)
-            $table->enum('order_status', ['pending', 'processing', 'completed', 'cancelled']); // 訂單狀態 (代處理｜處理中｜已完成｜已取消)
+            $table->enum('payment_status', ['unpaid','paid','payment-fail','refunding','refunded']);
+            $table->enum('order_status', ['confirmed', 'processing', 'completed', 'cancelled']);
+            $table->enum('cargo_status', ['in-stock', 'shipped', 'arrived', 'picked-up','returned','returning']);
             $table->text('notes')->nullable(); // 允許備註為空
             $table->timestamps();
         });
