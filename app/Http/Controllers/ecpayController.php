@@ -8,20 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-use Ecpay\Sdk\Factories\Factory;
 use Ecpay\Sdk\Services\UrlService;
+use Ecpay\Sdk\Factories\Factory;
 use Ecpay\Sdk\Response\VerifiedArrayResponse;
-use Ecpay\Sdk\Response\ArrayResponse;
 
 // $input['CreditInstallment'] = '3,6,12,18,24'; //分期期數
 // $input['UnionPay'] = 2; //關閉銀聯卡
 
 class EcpayController extends Controller
 {
-    public function index()
-    {
-        return view('gopay');
-    }
     public function store(Request $request, Order $order)
     {
         // 開始事務
@@ -163,93 +158,5 @@ class EcpayController extends Controller
             Log::error('Exception occurred during ECPay notification processing: ' . $e->getMessage());
             return '0|Fail';
         }
-    }
-    public function logisticsSelection()
-    {
-        // $factory = new Factory([
-        //     'hashKey' => '5294y06JbISpM5x9',
-        //     'hashIv' => 'v77hoKGq4kWxNNIS',
-        //     'hashMethod' => 'md5',
-        // ]);
-        // $postService = $factory->create('PostWithCmvEncodedStrResponseService');
-
-        // $input = [
-        //     'MerchantID' => '2000132',
-        //     'MerchantTradeNo' => 'Test' . time(),
-        //     'MerchantTradeDate' => date('Y/m/d H:i:s'),
-        //     'LogisticsType' => 'CVS',
-        //     'LogisticsSubType' => 'UNIMARTFREEZE',
-        //     'GoodsAmount' => 5000,
-        //     'GoodsName' => '綠界 SDK 範例商品',
-        //     'SenderName' => '陳大明',
-        //     'SenderCellPhone' => '0911222333',
-        //     'ReceiverName' => '王小美',
-        //     'ReceiverCellPhone' => '0933222111',
-        //     'IsCollection' => 'Y',
-
-        //     // 請參考 example/Logistics/Domestic/GetLogisticStatueResponse.php 範例開發
-        //     'ServerReplyURL' => 'https://www.ecpay.com.tw/example/server-reply',
-
-        //     // 請參考 example/Logistics/Domestic/GetMapResponse.php 範例取得
-        //     'ReceiverStoreID' => '896539',
-        // ];
-        // $url = 'https://logistics-stage.ecpay.com.tw/Express/Create';
-
-        // $response = $postService->post($input, $url);
-        // dd($response);
-
-        $factory = new Factory([
-            'hashKey' => '5294y06JbISpM5x9',
-            'hashIv' => 'v77hoKGq4kWxNNIS',
-            'hashMethod' => 'md5',
-        ]);
-        $postService = $factory->create('PostWithCmvEncodedStrResponseService');
-
-        $input = [
-            'MerchantID' => '2000132',
-            'MerchantTradeNo' => 'Test' . time(),
-            'MerchantTradeDate' => date('Y/m/d H:i:s'),
-            'LogisticsType' => 'CVS',
-            'LogisticsSubType' => 'UNIMARTFREEZE',
-            'GoodsAmount' => 1000,
-            'GoodsName' => '綠界 SDK 範例商品',
-            'SenderName' => '陳大明',
-            'SenderCellPhone' => '0911222333',
-            'ReceiverName' => '王小美',
-            'ReceiverCellPhone' => '0933222111',
-
-            // 請參考 example/Logistics/Domestic/GetLogisticStatueResponse.php 範例開發
-            'ServerReplyURL' => 'https://www.ecpay.com.tw/example/server-reply',
-
-            // 請參考 example/Logistics/Domestic/GetMapResponse.php 範例取得
-            'ReceiverStoreID' => '896539',
-        ];
-        $url = 'https://logistics-stage.ecpay.com.tw/Express/Create';
-
-        $response = $postService->post($input, $url);
-        dd($response);
-    }
-    public function map()
-    {
-        $factory = new Factory([
-            'hashKey' => '5294y06JbISpM5x9',
-            'hashIv' => 'v77hoKGq4kWxNNIS',
-            'hashMethod' => 'md5',
-        ]);
-        $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
-
-        $input = [
-            'MerchantID' => '2000132',
-            'MerchantTradeNo' => 'Test' . time(),
-            'LogisticsType' => 'CVS',
-            'LogisticsSubType' => 'FAMI',
-            'IsCollection' => 'N',
-
-            // 請參考 example/Logistics/Domestic/GetMapResponse.php 範例開發
-            'ServerReplyURL' => 'https://www.ecpay.com.tw/example/server-reply',
-        ];
-        $action = 'https://logistics-stage.ecpay.com.tw/Express/map';
-
-        echo $autoSubmitFormService->generate($input, $action);
     }
 }

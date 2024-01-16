@@ -23,10 +23,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/checkout', function () {
+    return view('checkOut');
+})->name('checkout');
 
-Route::resource('ecpay', ecpayController::class);
 Route::post('/receive', [ecpayController::class, 'receive']);
-Route::post('/logisticsSelection', [ecpayController::class, 'logisticsSelection']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
