@@ -7,8 +7,8 @@
 </head>
 <body>
     {{-- <form id="orderForm" action="/ecpay" method="post"> --}}
-    {{-- <form id="orderForm" action="/api/map" method="post"> --}}
-    <form id="orderForm" action="/api/logistics" method="post">
+    <form id="orderForm" action="/api/map" method="post">
+    {{-- <form id="orderForm" action="/api/logistics" method="post"> --}}
         @csrf <!-- 加入 CSRF 欄位 -->
 
         {{-- <label for="memberId">Member ID:</label>

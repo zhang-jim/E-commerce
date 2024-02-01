@@ -12,6 +12,9 @@ use Ecpay\Sdk\Services\UrlService;
 use Ecpay\Sdk\Factories\Factory;
 use Ecpay\Sdk\Response\VerifiedArrayResponse;
 
+use Illuminate\Support\Facades\Http;
+
+
 // $input['CreditInstallment'] = '3,6,12,18,24'; //分期期數
 // $input['UnionPay'] = 2; //關閉銀聯卡
 
@@ -89,33 +92,36 @@ class EcpayController extends Controller
     }
 
     // 生成 ECPay 表單
-    private function generateEcpayForm($merchantTradeNo, $totalAmount, $itemNames)
+    public function pay(Request $request)
     {
         $factory = new Factory([
             'hashKey' => '5294y06JbISpM5x9',
             'hashIv' => 'v77hoKGq4kWxNNIS',
         ]);
+        $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
 
-        $choosePayment = 'ALL'; //ALL, Credit, ApplePay, ATM
+        $choosePayment = 'ALL'; // ALL, Credit, ApplePay, ATM
 
         $input = [
-            'MerchantID' => '2000132', //商店編號
-            'MerchantTradeNo' => $merchantTradeNo,
+            'MerchantID' => '2000132', // 商店編號
+            'MerchantTradeNo' => 'UC' . time(),
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'PaymentType' => 'aio',
-            'TotalAmount' => $totalAmount,
+            'TotalAmount' => $_POST['price'],
             'TradeDesc' => UrlService::ecpayUrlEncode('購買商品'),
-            'ItemName' => $itemNames,
+            'ItemName' => $_POST['product'],
             'ChoosePayment' => $choosePayment,
             'EncryptType' => 1,
-            'ClientBackURL' => 'http://localhost',
+            'OrderResultURL' => 'http://127.0.0.1:8000/api/return',
             'ReturnURL' => 'http://localhost/receive',
         ];
 
-        $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
         $action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
+        // 生成付款表單 HTML
         echo $autoSubmitFormService->generate($input, $action);
+
+        // return response()->json(['paymentForm' => $paymentForm]);
     }
 
     public function receive(Request $request)

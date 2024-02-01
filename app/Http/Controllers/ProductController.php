@@ -12,8 +12,7 @@ class ProductController extends Controller
     public function index()
     {
         $product = Product::all();
-        // dd($product);
-        return view('product.index', compact('product'));
+        return response()->json($product);
     }
 
     // 導向新增商品頁
@@ -51,13 +50,14 @@ class ProductController extends Controller
     // 導向檢視商品頁
     public function show(Product $product)
     {
-        return view('product.show', compact('product'));
+        return response()->json($product);
     }
 
     // 導向商品編輯頁
     public function edit(Product $product)
     {
-        return view('product.edit', compact('product'));
+        return response()->json($product);
+        // return view('product.edit', compact('product'));
     }
 
     // 更新商品功能，並且檢查圖片是否有更新

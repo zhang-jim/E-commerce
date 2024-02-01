@@ -18,10 +18,9 @@ class ecpayMapController extends Controller
 
         $input = [
             'MerchantID' => '2000132',
-            'MerchantTradeNo' => 'Test' . time(), //可變動值
+            'MerchantTradeNo' => 'Test' . time(),
             'LogisticsType' => 'CVS',
             'LogisticsSubType' => 'UNIMART', //可變動值
-            'IsCollection' => 'Y',
 
             // 請參考 example/Logistics/Domestic/GetMapResponse.php 範例開發
             'ServerReplyURL' => 'http://localhost/api/map-response',
