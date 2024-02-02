@@ -7,7 +7,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\store\ProductController as StoreProductController;
 
 use App\Http\Controllers\store\MemberController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+
+use App\Http\Controllers\Auth2\RegisterController;
+use App\Http\Controllers\Auth2\AuthController;
 
 use App\Http\Controllers\ecpayController;
 use App\Http\Controllers\ecpayMapController;
@@ -36,12 +38,17 @@ Route::resource('/admin/product', ProductController::class); //後臺管理商�
 
 Route::post('/ecpay', [ecpayController::class, 'pay']);
 
+Route::post('/register', [RegisterController::class, 'memberRegister'])->name('member.register');
+Route::post('/admin/register', [RegisterController::class, 'adminRegister'])->name('admin.register');
 
-Route::post('/store/register', [MemberController::class, 'register'])->name('member.register');
-Route::post('/store/login', [MemberController::class, 'login'])->name('member.login');
-Route::post('/store/getuser', [MemberController::class, 'getuser'])->name('member.getuser');
+Route::post('/login', [AuthController::class, 'memberLogin'])->name('member.login');
+Route::post('/admin/login', [AuthController::class, 'adminLogin'])->name('admin.login') ;
 
-Route::get('/user', [MemberController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/logout', [AuthController::class, 'memberDestory'])->name('member.logout');
+Route::post('/admin/logout', [AuthController::class, 'adminDestory'])->name('admin.logout') ;
+
+Route::get('/user', [AuthController::class, 'memberUser'])->middleware('auth:sanctum');;
+Route::get('/admin/user', [AuthController::class, 'adminUser']);
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });

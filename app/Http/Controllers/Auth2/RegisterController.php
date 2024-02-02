@@ -1,24 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\store;
+namespace App\Http\Controllers\Auth2;
 
-use App\Http\Controllers\Controller;
 use App\Models\Member;
-
+use App\Models\User;
+use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
-class MemberController extends Controller
+class RegisterController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-
-        return response()->json(['user' => $user]);
-    }
-    public function register(Request $request)
+    public function memberRegister(Request $request)
     {
         try {
             $request->validate([
@@ -40,17 +33,25 @@ class MemberController extends Controller
             return response()->json(['errors' => $exception->errors()], 422);
         }
     }
-
-    public function login(Request $request)
+    public function adminRegister(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email',
+                'password' => 'required|string',
+            ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json(['token' => $token]);
-        } else {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        } catch (ValidationException $exception) {
+            return response()->json(['errors' => $exception->errors()], 422);
         }
     }
 }
